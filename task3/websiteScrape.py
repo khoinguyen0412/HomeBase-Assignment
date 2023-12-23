@@ -120,6 +120,8 @@ def main():
 
         wait_page()
         get_info_by_page()
+
+    driver.quit()
                
 if __name__ == '__main__':
     main()
