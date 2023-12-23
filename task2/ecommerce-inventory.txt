@@ -1,0 +1,60 @@
+ENUM "product_type"{
+  "Home"
+  "Electronic"
+  "Clothing"
+}
+
+ENUM "order_status"{
+  "Processed"
+  "Delivering"
+  "Delivered"
+  "Refunded"
+}
+
+
+Table "product_information"{
+  "id" bigint [pk, not null, increment]
+  "name" varchar [not null]
+  "description" varchar [not null]
+  "price" decimal [not null]
+  "quantity_in_stock" int [not null , ref: - "inventory_tracking"."current_quantity"]
+  "product_type" product_type [default:"Uncategorized"]
+}
+
+Table "order_management"{
+  "id" bigint [pk, not null, increment]
+  "order_date" timestamp [not null]
+  "customer_id" int [not null, ref: > "customers"."id"]
+  "order_status" order_status [default: "Pending"]
+}
+
+Table "ordered_items"{
+  "id" bigint [pk, not null, increment]
+  "order_id" int [not null, ref: > "order_management"."id"]
+  "product_id" int [not null, ref: > "product_information"."id"]
+  "quantity" int [not null]
+}
+
+
+Table "customers"{
+  "id" bigint [pk, not null, increment]
+  "name" varchar [not null]
+  "phone_number" varchar [not null]
+  "address" varchar [not null]
+}
+
+Table "inventory_tracking"{
+  "id" bigint [pk, not null, increment]
+  "product_id" int [not null, ref: - "product_information"."id"]
+  "current_quantity" int [not null]
+  "updated_at" DATE
+}
+
+Table "transaction"{
+  "id" bigint [pk, not null, increment]
+  "product_id" int [not null, ref: - "product_information"."id"]
+  "quantity_in" int [not null]
+  "quantity_out" int [not null]
+  "transaction_date" DATE
+}
+
